@@ -1,0 +1,45 @@
+name:Github code for CI/CD pipeline
+
+env:
+ OUTPUT_PATH: ${{ github.workspace }}
+ on: [push]
+ jobs:
+ deployvm:
+ runs_on: macos_latest
+ steps:
+ - name: checkout repo
+   uses: actions/checkout@v2
+   run: |
+    ls '${{ env.OUTPUT_PATH }}\IaC\AzCLI'
+ - name: deploy a vm
+ env:
+
+        RESOURCE_GROUP: RGRPAZWEUMLIT001DEVATN
+
+        RESOURCE_GROUP_REGION: West Europe
+
+        SERVER_NAME: gihtubactions
+
+        ADMIN_LOGIN: ADMAIP013@crb.apmoller.net
+        
+        run: >
+
+        powershell -command "& '${{ env.OUTPUT_PATH }}\IaC\AzCLI\vmcreation.ps1'"
+
+        -servicePrincipal ${{ secrets.SERVICE_PRINCIPAL_APPID }}
+
+        -servicePrincipalSecret ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
+
+        -servicePrincipalTenantId ${{ secrets.SERVICE_PRINCIPAL_TENANTID }}
+
+        -azureSubscriptionName ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+        -resourceGroupName %RESOURCE_GROUP%
+
+        -resourceGroupNameRegion %RESOURCE_GROUP_REGION%
+
+        -serverName %SERVER_NAME%
+
+        -adminLogin %ADMIN_LOGIN%
+
+        -adminPassword ${{ secrets.ADMIN_PASSWORD }}
