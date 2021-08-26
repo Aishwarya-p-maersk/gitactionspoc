@@ -7,8 +7,13 @@ env:
  deployvm:
  runs_on: macos_latest
  steps:
+ 
+ - name: use Azure login
+   user: azure/login@v1
+   
  - name: checkout repo
    uses: actions/checkout@v2
+ 
    run: |
     ls '${{ env.OUTPUT_PATH }}\IaC\AzCLI'
  - name: deploy a vm
